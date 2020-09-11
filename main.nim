@@ -1,10 +1,10 @@
 import strutils
 
-
 let fullLine = readLine(stdin)
 
 proc extractPrefix(fullLine: string): (string, string) =
-    (fullLine.substr(0, 1), fullLine.substr(2))
+    let prefix = splitWhitespace(fullLine)[0]
+    (fullLine.substr(0, prefix.len), fullLine.substr(prefix.len))
 
 proc wrapLine(line: string, prefix: string): string =
     var lines: seq[string] = @[]
