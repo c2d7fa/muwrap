@@ -1,4 +1,3 @@
 import lib
 
-echo stdin.readLine.wrap
-
+echo wrap(stdin.readAll)

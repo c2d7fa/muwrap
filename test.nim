@@ -37,3 +37,8 @@ block:
   test "Wrapping a comment line with >80 characters inserts the comment prefix at each line in the output":
     check wrap(commentLine).allLines(proc (line: string): bool = line.startsWith("//"))
 
+block:
+  let longLine = r"This is a single line of text that is quite long, so when we ask muwrap to wrap it, we would expect it to take up multiple lines. Hopefully the unit tests will be able to automatically tell whether that's the case or not."
+
+  test "Rewrapping a correctly wrapped paragraph doesn't change anything":
+    check wrap(longLine) == wrap(wrap(longLine))
