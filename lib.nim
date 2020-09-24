@@ -1,8 +1,9 @@
 import strutils except splitWhitespace
+import sequtils
 import unicode
 
 proc looksLikeCommentPrefix(word: string): bool =
-    not word.isAlpha
+    not toSeq(word.runes).anyIt(it.isAlpha)
 
 proc extractPrefix(fullLine: string): (string, string) =
     let prefix = splitWhitespace(fullLine)[0]

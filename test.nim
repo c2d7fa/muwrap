@@ -37,6 +37,10 @@ block:
   test "Wrapping a comment line with >80 characters inserts the comment prefix at each line in the output":
     check wrap(commentLine).allLines(proc (line: string): bool = line.startsWith("//"))
 
+  test "A normal word is not repeated, even if it contains an apostrophe":
+    let textLine = r"I've noticed that before this bug was fixed, it was the case that a word like ""I've"" would be detected as a comment prefix because it contains a punctuation character."
+    check not wrap(textLine).allLines(proc (line: string): bool = line.startsWith("I've"))
+
 block:
   let longLine = r"This is a single line of text that is quite long, so when we ask muwrap to wrap it, we would expect it to take up multiple lines. Hopefully the unit tests will be able to automatically tell whether that's the case or not."
 
