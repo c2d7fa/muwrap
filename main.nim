@@ -1,3 +1,3 @@
 import lib
 
-echo wrap(stdin.readAll)
+stdout.write wrap(stdin.readAll)
