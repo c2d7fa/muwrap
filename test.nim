@@ -8,8 +8,16 @@ proc lines(text: string): int = text.splitLines.len
 proc allLines(text: string, pred: proc(line: string): bool): bool = text.splitLines.all(pred)
 proc isShort(line: string): bool = line.len < 80
 
-test "Wrapping a line with <80 characters doesn't change anything":
-  check wrap(r"Hello, this is a short string.") == r"Hello, this is a short string."
+block:
+  suite "Wrapping lines with <80 characters doesn't change anything":
+    test "When there is no trailing whitespace":
+      check wrap("Hello, this is a short string.") == "Hello, this is a short string."
+
+    test "When there is a single trailing space":
+      check wrap("Hello, this is a short string. ") == "Hello, this is a short string. "
+
+    test "When there is a trailing newline":
+      check wrap("Hello, this is a short string.\n") == "Hello, this is a short string.\n"
 
 block:
   let longLine = r"This is a single line of text that is quite long, so when we ask muwrap to wrap it, we would expect it to take up multiple lines. Hopefully the unit tests will be able to automatically tell whether that's the case or not."
