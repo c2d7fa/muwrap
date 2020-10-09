@@ -1,4 +1,4 @@
-import strutils except splitWhitespace
+import strutils except splitWhitespace, strip
 import sequtils
 import unicode
 
@@ -13,6 +13,13 @@ proc extractPrefix(fullLine: string): (string, string) =
     else:
         ("", fullLine)
 
+proc preserveTrailingWhitespace(output: string, input: string): string =
+  result = output.strip(leading = false)
+  if input.endsWith(" "):
+    result &= " "
+  elif input.endsWith("\n"):
+    result &= "\n"
+
 proc wrapLine(line: string, prefix: string): string =
     var lines: seq[string] = @[]
 
@@ -24,7 +31,7 @@ proc wrapLine(line: string, prefix: string): string =
         currentLine.add(word)
     lines.add(prefix & currentLine.join(" "))
 
-    lines.join("\n")
+    lines.join("\n").preserveTrailingWhitespace(line)
 
 proc wrap*(text: string): string =
   let (prefix, line) = extractPrefix(text)
