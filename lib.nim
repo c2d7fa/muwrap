@@ -23,13 +23,16 @@ proc preserveTrailingWhitespace(output: string, input: string): string =
 proc wrapLine(line: string, prefix: string): string =
     var lines: seq[string] = @[]
 
+    proc addLine(currentLine: seq[string]) =
+        lines.add(prefix & currentLine.filterIt(not it.isEmptyOrWhitespace).join(" ").strip)
+
     var currentLine: seq[string] = @[]
     for word in splitWhitespace(line):
         if prefix.len + currentLine.join(" ").len + word.len > 80:
-            lines.add(prefix & currentLine.join(" "))
+            addLine(currentLine)
             currentLine = @[]
         currentLine.add(word)
-    lines.add(prefix & currentLine.join(" "))
+    addLine(currentLine)
 
     lines.join("\n").preserveTrailingWhitespace(line)
 

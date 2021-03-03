@@ -7,6 +7,7 @@ import sequtils
 proc lines(text: string): int = text.splitLines.len
 proc allLines(text: string, pred: proc(line: string): bool): bool = text.splitLines.all(pred)
 proc isShort(line: string): bool = line.len < 80
+proc hasNoSpaceSequences(text: string): bool = not text.contains("  ")
 
 block:
   suite "Wrapping lines with <80 characters doesn't change anything":
@@ -54,3 +55,14 @@ block:
 
   test "Rewrapping a correctly wrapped paragraph doesn't change anything":
     check wrap(longLine) == wrap(wrap(longLine))
+
+suite "Collapsing whitespace":
+  test "Trailing whitespace inside a paragraph is collapsed when all newlines are removed":
+    check wrap("Hello, this is a paragraph that should be   \nwrapped onto a single line.").hasNoSpaceSequences
+
+  test "Trailing whitespace inside a paragraph is collapsed when the paragraph is otherwise correctly wrapped":
+    let paragraph = "This is an example of a paragraph that is already correctly wrapped at the 80  \ncharacter column, with the notable exception that some lines in this paragraph  \ncontains trailing whitespace."
+    check wrap(paragraph).hasNoSpaceSequences
+
+  test "Mulitple sequential spaces are collapsed":
+    check wrap("This    string   has   too    many   spaces!").hasNoSpaceSequences
