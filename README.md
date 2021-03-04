@@ -11,6 +11,15 @@ automatically handles comment characters.
     // This is an example of a long comment. Let me show you how to use muwrap to
     // automatically wrap this comment into multiple lines.
 
+## Installation
+
+If you're using Arch Linux, you can install **[muwrap-git](https://aur.archlinux.org/packages/muwrap-git/)**
+from the AUR, for example using [yay](https://github.com/Jguer/yay):
+
+    $ yay -S muwrap-git
+
+Otherwise, see *Building* below.
+
 ## Building
 
 `muwrap` is written in Nim. Install Nim, and then run this command to compile it:

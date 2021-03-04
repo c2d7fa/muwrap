@@ -1,0 +1,3 @@
+[submodule "aur"]
+	path = aur
+	url = ssh+git://aur@aur.archlinux.org/muwrap-git.git
