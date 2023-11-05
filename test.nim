@@ -9,6 +9,14 @@ proc allLines(text: string, pred: proc(line: string): bool): bool = text.splitLi
 proc isShort(line: string): bool = line.len < 80
 proc hasNoSpaceSequences(text: string): bool = not text.contains("  ")
 
+proc first[T](xs: seq[T]): T = xs[0]
+proc rest[T](xs: seq[T]): seq[T] = xs[1..^0]
+
+proc eachStartsWith(strings: seq[string], prefix: string): bool =
+  strings.all(proc (s: string): bool = s.startsWith(prefix))
+proc noneContains(strings: seq[string], search: string): bool =
+  not strings.any(proc (s: string): bool = s.contains(search))
+
 block:
   suite "Wrapping lines with <80 characters doesn't change anything":
     test "When there is no trailing whitespace":
@@ -66,3 +74,34 @@ suite "Collapsing whitespace":
 
   test "Mulitple sequential spaces are collapsed":
     check wrap("This    string   has   too    many   spaces!").hasNoSpaceSequences
+
+suite "Preserving indentation":
+  let longLine = r"    This line is indented by four spaces. When it is wrapped, it will retain the indentation, and the following lines will also be indented by four spaces."
+
+  test "Long line with indentation is wrapped":
+    check wrap(longLine).lines > 1
+
+#  test "All lines preserve indentation":
+#    check wrap(longLine).splitLines.eachStartsWith("    ")
+
+#suite "Wrapping an indented list item":
+#  let longLineHyphen = r"  - This is a list item that is indented by two spaces and begins with a hyphen (or asterisk), which is considered a list character. It will be wrapped such that the following text is indented to the first line."
+#  let longLineAsterisk = longLineHyphen.replace("-", "*")
+#
+#  test "Preserves the indentation on the first line":
+#    check wrap(longLineHyphen).splitLines.first.startsWith("  - ")
+#    check wrap(longLineAsterisk).splitLines.first.startsWith("  * ")
+#
+#  test "Adds extra indentation on the following lines":
+#    check wrap(longLineHyphen).splitLines.rest.eachStartsWith("    ")
+#    check wrap(longLineAsterisk).splitLines.rest.eachStartsWith("    ")
+#
+#  test "Doesn't repeat the list character on the following lines":
+#    check wrap(longLineHyphen).splitLines.rest.noneContains("-")
+#    check wrap(longLineAsterisk).splitLines.rest.noneContains("*")
+
+#suite "Examples":
+#  test "Example 1":
+#    let input = "    # The prefix is everything until the first word character, including\n    # any indentation and comment syntax. For example, the prefix of this\n    # line would be \"    # \"."
+#    let expectedOutput = "TODO"
+#    check wrap(input) == expectedOutput

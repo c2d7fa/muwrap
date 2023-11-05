@@ -39,4 +39,3 @@ proc wrapLine(line: string, prefix: string): string =
 proc wrap*(text: string): string =
   let (prefix, line) = extractPrefix(text)
   wrapLine(line, prefix)
-
